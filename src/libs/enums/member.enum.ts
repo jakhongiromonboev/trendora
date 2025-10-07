@@ -1,7 +1,6 @@
 export enum MemberType {
   USER = "USER",
   ADMIN = "ADMIN",
-  VENDOR = "VENDOR", // Optional: future seller/partner
 }
 
 export enum MemberStatus {
