@@ -7,16 +7,19 @@ const orderItemSchema = new Schema(
       ref: "Order",
       required: true,
     },
+
     productId: {
       type: Schema.Types.ObjectId,
       ref: "Product",
       required: true,
     },
+
     itemQuantity: {
       type: Number,
       required: true,
       min: 1,
     },
+
     itemPrice: {
       type: Number,
       required: true,

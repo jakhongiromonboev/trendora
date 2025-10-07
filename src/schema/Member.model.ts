@@ -43,8 +43,8 @@ const memberSchema = new Schema(
 
     memberEmail: {
       type: String,
-      required: false, // later will be required
       index: { unique: true, sparse: true },
+      required: true,
     },
 
     memberImage: {

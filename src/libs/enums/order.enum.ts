@@ -7,8 +7,6 @@ export enum OrderStatus {
   CANCELED = "CANCELED", // Order canceled
 }
 
-/** FOR FUTURE WHEN INTEGRATE PAYMENT SYSTEM **/
-
 export enum PaymentMethod {
   CARD = "CARD",
   PAYPAL = "PAYPAL",
