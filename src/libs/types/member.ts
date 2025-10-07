@@ -33,6 +33,12 @@ export interface MemberInput {
   memberPoints?: number;
 }
 
+export interface LoginInput {
+  memberNick: string;
+  memberPassword: string;
+  memberEmail?: string;
+}
+
 export interface AdminRequest extends Request {
   member: Member;
   session: Session & { member: Member };
