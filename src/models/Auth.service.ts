@@ -6,7 +6,7 @@ import Errors, { HttpCode, Message } from "../libs/Errors";
 class AuthService {
   private readonly secretToken;
   constructor() {
-    this.secretToken = process.env.SECRET_TOKEN;
+    this.secretToken = process.env.SECRET_TOKEN as string;
   }
 
   public async createToken(payload: Member) {
@@ -27,6 +27,15 @@ class AuthService {
         }
       );
     });
+  }
+
+  public async checkAuth(token: string): Promise<Member> {
+    const result: Member = (await jwt.verify(
+      token,
+      this.secretToken
+    )) as Member;
+    console.log(`-----[AUTH] memberNick: ${result.memberNick} ----`);
+    return result;
   }
 }
 
