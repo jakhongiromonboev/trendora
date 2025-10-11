@@ -26,6 +26,40 @@ class MemberService {
     }
   }
 
+  public async login(input: LoginInput): Promise<Member> {
+    const member = await this.memberModel
+      .findOne(
+        {
+          $or: [
+            { memberNick: input.memberNick },
+            { memberEmail: input.memberEmail },
+          ],
+          memberStatus: { $ne: MemberStatus.DELETE },
+        },
+        { memberNick: 1, memberEmail: 1, memberPassword: 1, memberStatus: 1 }
+      )
+      .exec();
+
+    if (!member) {
+      const msg = input.memberEmail
+        ? Message.NO_MEMBER_EMAIL
+        : Message.NO_MEMBER_NICK;
+
+      throw new Errors(HttpCode.NOT_FOUND, msg);
+    }
+
+    const isMatch = await bcrypt.compare(
+      input.memberPassword,
+      member.memberPassword
+    );
+
+    if (!isMatch) {
+      throw new Errors(HttpCode.UNAUTHORIZED, Message.WRONG_PASSWORD);
+    }
+
+    return await this.memberModel.findById(member._id).lean().exec();
+  }
+
   /** SSR --> ADMIN **/
 
   public async processSignup(input: MemberInput): Promise<Member> {
