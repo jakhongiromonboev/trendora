@@ -56,6 +56,10 @@ const memberSchema = new Schema(
       default: 0,
     },
 
+    memberDesc: {
+      type: String,
+    },
+
     passwordResetToken: {
       type: String,
     },

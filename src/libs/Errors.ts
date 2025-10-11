@@ -22,6 +22,7 @@ export enum Message {
   BLOCKED_USER = "You have been blocked, contact restaurant!",
   TOKEN_CREATION_FAILED = "TOKEN CREATION ERROR",
   EMAIL_REQUIRED = "Email is required!",
+  USED_EMAIL = "This email is already used please select another email!",
 }
 
 class Errors extends Error {
