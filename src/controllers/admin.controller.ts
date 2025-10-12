@@ -1,6 +1,6 @@
 import MemberService from "../models/Member.service";
 import { T } from "../libs/types/common";
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import Errors, { HttpCode, Message } from "../libs/Errors";
 import { AdminRequest, LoginInput, MemberInput } from "../libs/types/member";
 import { MemberType } from "../libs/enums/member.enum";
@@ -101,6 +101,59 @@ adminController.logout = async (req: AdminRequest, res: Response) => {
   } catch (err) {
     console.log("Error,logout", err);
     res.redirect("/admin");
+  }
+};
+
+//ADMIN --> USERS
+adminController.getAllUsers = async (req: AdminRequest, res: Response) => {
+  try {
+    console.log("getAllUsers");
+    const result = await memberService.getAllUsers();
+    res.render("users", { users: result });
+  } catch (err) {
+    console.log("Error, getAllUsers", err);
+    res.redirect("/admin/login");
+  }
+};
+
+adminController.updateMemberByAdmin = async (req: Request, res: Response) => {
+  try {
+    console.log("updateMemberAdmin");
+    const result = await memberService.updateMemberByAdmin(req.body);
+    res.status(HttpCode.OK).json({ data: result });
+  } catch (err) {
+    console.log("Error,updateMemberByAdmin ");
+    if (err instanceof Errors) res.status(err.code).json(err);
+    else res.status(Errors.standard.code).json(Errors.standard);
+  }
+};
+
+/** CHECKING AUTHENTICATION OF ADMIN **/
+adminController.checkAuthSession = async (req: AdminRequest, res: Response) => {
+  try {
+    console.log("checkAuthSession");
+    if (req.session?.member) {
+      res.send(`<script>alert("Hi,${req.session.member.memberNick}")</script>`);
+    } else res.send(`<script>alert("${Message.NOT_AUTHENTICATED}")</script>`);
+  } catch (err) {
+    console.log("Error, checkAuthSession");
+  }
+};
+
+adminController.verifyAdmin = async (
+  req: AdminRequest,
+  res: Response,
+  next: NextFunction
+) => {
+  console.log("verifyAdmin");
+  if (req.session?.member?.memberType === MemberType.ADMIN) {
+    req.member = req.session.member;
+    next();
+  } else {
+    const message = Message.NOT_AUTHENTICATED;
+    res.send(
+      `<script>alert("${message}"); window.location.replace("/admin/login")</script>`
+    );
   }
 };
 

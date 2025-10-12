@@ -22,12 +22,25 @@ routerAdmin
   .post("/login", adminController.processLogin);
 
 routerAdmin.get("/logout", adminController.logout);
+routerAdmin.get("/check-me", adminController.checkAuthSession);
 
 /** DASHBOARD **/
 
 /** PRODUCTS **/
 
 /** USERS **/
+
+routerAdmin.get(
+  "/user/all",
+  adminController.verifyAdmin,
+  adminController.getAllUsers
+);
+
+routerAdmin.post(
+  "/user/edit",
+  adminController.verifyAdmin,
+  adminController.updateMemberByAdmin
+);
 
 /** ANALYTICS **/
 
