@@ -28,6 +28,8 @@ routerAdmin.get("/check-me", adminController.checkAuthSession);
 
 /** PRODUCTS **/
 
+routerAdmin.get("/product/all", adminController.verifyAdmin);
+
 /** USERS **/
 
 routerAdmin.get(
