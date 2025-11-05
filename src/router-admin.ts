@@ -1,6 +1,7 @@
 import express from "express";
 import adminController from "./controllers/admin.controller";
 import makeUpLoader from "./libs/utils/uploader";
+import productController from "./controllers/product.controller";
 
 const routerAdmin = express.Router();
 
@@ -28,7 +29,24 @@ routerAdmin.get("/check-me", adminController.checkAuthSession);
 
 /** PRODUCTS **/
 
-routerAdmin.get("/product/all", adminController.verifyAdmin);
+routerAdmin.get(
+  "/product/all",
+  adminController.verifyAdmin,
+  productController.getAllProductsByAdmin
+);
+
+routerAdmin.post(
+  "/product/create",
+  adminController.verifyAdmin,
+  makeUpLoader("products").array("productImages", 5),
+  productController.createNewProduct
+);
+
+routerAdmin.post(
+  "/product/:id",
+  adminController.verifyAdmin,
+  productController.updateChosenProduct
+);
 
 /** USERS **/
 

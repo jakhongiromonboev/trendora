@@ -106,6 +106,7 @@ memberController.updateMember = async (req: ExtendedRequest, res: Response) => {
   }
 };
 
+//no need at all!
 memberController.getTopUsers = async (req: Request, res: Response) => {
   try {
     console.log("getTopUsers");

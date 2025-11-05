@@ -24,7 +24,6 @@ const productSchema = new Schema(
     productName: {
       type: String,
       required: true,
-      index: { unique: true, sparse: true },
     },
 
     productPrice: {
@@ -41,7 +40,7 @@ const productSchema = new Schema(
     productSize: {
       type: String,
       enum: ProductSize,
-      required: true,
+      // required: true,
     },
 
     productShoeSize: {
@@ -72,10 +71,22 @@ const productSchema = new Schema(
   { timestamps: true }
 );
 
-// Prevent duplicate product variants including gender
+// For clothes
 productSchema.index(
   { productName: 1, productSize: 1, productGender: 1 },
-  { unique: true }
+  {
+    unique: true,
+    partialFilterExpression: { productSize: { $exists: true } },
+  }
+);
+
+// For shoes
+productSchema.index(
+  { productName: 1, productShoeSize: 1, productGender: 1 },
+  {
+    unique: true,
+    partialFilterExpression: { productShoeSize: { $exists: true } },
+  }
 );
 
 export default mongoose.model("Product", productSchema);
