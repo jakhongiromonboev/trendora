@@ -27,10 +27,15 @@ router.post(
   memberController.updateMember
 );
 
-router.get("/member/top-users", memberController.getTopUsers);
+/** router.get("/member/top-users", memberController.getTopUsers); **/
 
 /** PRODUCT **/
 router.get("/product/all", productController.getProducts);
+router.get(
+  "/product/:id",
+  memberController.retrieveAuth,
+  productController.getProduct
+);
 
 /** ORDER **/
 

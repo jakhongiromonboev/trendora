@@ -140,4 +140,20 @@ memberController.verifyAuth = async (
   }
 };
 
+memberController.retrieveAuth = async (
+  req: ExtendedRequest,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    console.log("retrieveAuth");
+    const token = req.cookies["accessToken"];
+    if (token) req.member = await authService.checkAuth(token);
+    next();
+  } catch (err) {
+    console.log("Error, retrieveAuth", err);
+    next();
+  }
+};
+
 export default memberController;
