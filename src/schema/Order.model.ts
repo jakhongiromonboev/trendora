@@ -1,9 +1,5 @@
 import mongoose, { Schema } from "mongoose";
-import {
-  OrderStatus,
-  PaymentMethod,
-  PaymentStatus,
-} from "../libs/enums/order.enum";
+import { OrderStatus } from "../libs/enums/order.enum";
 
 const orderSchema = new Schema(
   {
@@ -21,18 +17,6 @@ const orderSchema = new Schema(
     orderDelivery: {
       type: Number,
       required: true,
-    },
-
-    paymentMethod: {
-      type: String,
-      enum: PaymentMethod,
-      default: PaymentMethod.CARD,
-    },
-
-    paymentStatus: {
-      type: String,
-      enum: PaymentStatus,
-      default: PaymentStatus.PENDING,
     },
 
     orderStatus: {

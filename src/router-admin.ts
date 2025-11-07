@@ -2,6 +2,7 @@ import express from "express";
 import adminController from "./controllers/admin.controller";
 import makeUpLoader from "./libs/utils/uploader";
 import productController from "./controllers/product.controller";
+import orderController from "./controllers/order.controller";
 
 const routerAdmin = express.Router();
 
@@ -60,6 +61,14 @@ routerAdmin.post(
   "/user/edit",
   adminController.verifyAdmin,
   adminController.updateMemberByAdmin
+);
+
+/** ORDERS **/
+
+routerAdmin.get(
+  "/order/all",
+  adminController.verifyAdmin,
+  orderController.getAllOrdersByAdmin
 );
 
 /** ANALYTICS **/
