@@ -71,6 +71,12 @@ routerAdmin.get(
   orderController.getAllOrdersByAdmin
 );
 
+routerAdmin.post(
+  "/order/update",
+  adminController.verifyAdmin,
+  orderController.updateOrderByAdmin
+);
+
 /** ANALYTICS **/
 
 /** SETTINGS **/

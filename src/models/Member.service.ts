@@ -1,5 +1,6 @@
 import { shapeIntoMongooseObjectId } from "../libs/config";
 import Errors, { HttpCode, Message } from "../libs/Errors";
+import { ObjectId } from "mongoose";
 import { MemberStatus, MemberType } from "../libs/enums/member.enum";
 import {
   LoginInput,
@@ -177,6 +178,25 @@ class MemberService {
     if (!result) throw new Errors(HttpCode.NOT_MODIFIED, Message.UPDATE_FAILED);
 
     return result;
+  }
+
+  public async addUserPoint(
+    memberId: string | ObjectId,
+    point: number
+  ): Promise<Member> {
+    const shapedId = shapeIntoMongooseObjectId(memberId);
+
+    return await this.memberModel
+      .findOneAndUpdate(
+        {
+          _id: shapedId,
+          memberType: MemberType.USER,
+          memberStatus: MemberStatus.ACTIVE,
+        },
+        { $inc: { memberPoints: point } },
+        { new: true }
+      )
+      .exec();
   }
 }
 
