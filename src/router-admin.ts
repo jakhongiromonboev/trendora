@@ -77,8 +77,6 @@ routerAdmin.post(
   orderController.updateOrderByAdmin
 );
 
-/** ANALYTICS **/
-
 /** SETTINGS **/
 
 export default routerAdmin;

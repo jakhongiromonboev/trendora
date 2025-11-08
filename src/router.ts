@@ -4,6 +4,7 @@ import memberController from "./controllers/member.controller";
 const router = express.Router();
 import uploader from "./libs/utils/uploader";
 import productController from "./controllers/product.controller";
+import orderController from "./controllers/order.controller";
 
 /** MEMBER **/
 router.post("/member/signup", memberController.signup);
@@ -38,5 +39,16 @@ router.get(
 );
 
 /** ORDER **/
+router.post(
+  "/order/create",
+  memberController.verifyAuth,
+  orderController.createOrder
+);
+
+router.get(
+  "/order/get-all",
+  memberController.verifyAuth,
+  orderController.getMyOrders
+);
 
 export default router;

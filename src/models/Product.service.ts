@@ -88,6 +88,26 @@ class ProductService {
     return result;
   }
 
+  public async updateProductLeftCount(
+    id: ObjectId,
+    quantity: number
+  ): Promise<Product> {
+    const productId = shapeIntoMongooseObjectId(id);
+    const result: Product = await this.productModel
+      .findByIdAndUpdate(
+        productId,
+        {
+          $inc: { productLeftCount: -quantity },
+        },
+        { new: true }
+      )
+      .exec();
+
+    if (!result) throw new Errors(HttpCode.NOT_MODIFIED, Message.UPDATE_FAILED);
+
+    return result;
+  }
+
   /** SSR --> ADMIN **/
   public async getAllProductsByAdmin(): Promise<Product[]> {
     const result = await this.productModel.find().exec();
