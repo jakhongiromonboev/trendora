@@ -79,4 +79,16 @@ routerAdmin.post(
 
 /** SETTINGS **/
 
+routerAdmin.get(
+  "/profile",
+  adminController.verifyAdmin,
+  adminController.getAdminProfilePage
+);
+
+routerAdmin.post(
+  "/profile/update",
+  adminController.verifyAdmin,
+  makeUpLoader("members").single("memberImage"),
+  adminController.updateAdminInfo
+);
 export default routerAdmin;

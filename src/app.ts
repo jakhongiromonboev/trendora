@@ -45,6 +45,12 @@ app.use(
   })
 );
 
+app.use(function (req, res, next) {
+  const sessionInstance = req.session as T;
+  res.locals.member = sessionInstance.member; //GLOBALLY AVAILABLE
+  next();
+});
+
 /** 3-VIEWS **/
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");

@@ -2,7 +2,12 @@ import MemberService from "../models/Member.service";
 import { T } from "../libs/types/common";
 import { NextFunction, Request, Response } from "express";
 import Errors, { HttpCode, Message } from "../libs/Errors";
-import { AdminRequest, LoginInput, MemberInput } from "../libs/types/member";
+import {
+  AdminRequest,
+  LoginInput,
+  MemberInput,
+  MemberUpdateInput,
+} from "../libs/types/member";
 import { MemberType } from "../libs/enums/member.enum";
 
 const memberService = new MemberService(); //getting instance from Member Service
@@ -123,6 +128,46 @@ adminController.updateMemberByAdmin = async (req: Request, res: Response) => {
     res.status(HttpCode.OK).json({ data: result });
   } catch (err) {
     console.log("Error,updateMemberByAdmin ");
+    if (err instanceof Errors) res.status(err.code).json(err);
+    else res.status(Errors.standard.code).json(Errors.standard);
+  }
+};
+
+//UPDATE ADMIN PROFILE
+adminController.getAdminProfilePage = async (
+  req: AdminRequest,
+  res: Response
+) => {
+  try {
+    console.log("getAdminProfilePage");
+    const admin = req.session.member;
+    res.render("admin-info", { admin });
+  } catch (err) {
+    console.log("Error, getAdminProfilePage", err);
+    if (err instanceof Errors) res.status(err.code).json(err);
+    else res.status(Errors.standard.code).json(Errors.standard);
+  }
+};
+
+adminController.updateAdminInfo = async (req: AdminRequest, res: Response) => {
+  try {
+    console.log("updateAdminInfo");
+    const input: MemberUpdateInput = req.body;
+    if (req.file) input.memberImage = req.file.path.replace(/\\/g, "/");
+    const result = await memberService.updateAdminInfo(req.member, input);
+    req.session.member = result;
+
+    req.session.save((err) => {
+      if (err) {
+        console.error("Error, session save error!");
+        return res
+          .status(HttpCode.INTERNAL_SERVER_ERROR)
+          .json(Message.SOMETHING_WENT_WRONG);
+      }
+      res.status(HttpCode.OK).json({ data: result });
+    });
+  } catch (err) {
+    console.log("Error, updateAdminInfo", err);
     if (err instanceof Errors) res.status(err.code).json(err);
     else res.status(Errors.standard.code).json(Errors.standard);
   }
