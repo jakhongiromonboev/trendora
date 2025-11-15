@@ -1,0 +1,95 @@
+<%- include('includes/header') %>
+<link rel="stylesheet" type="text/css" href="/css/login.css" />
+<body>
+  <div class="login-page">
+    <div class="login-container">
+      <!-- LEFT SIDE - Image/Branding -->
+      <div class="login-left">
+        <div class="branding-content">
+          <h1 class="brand-title">TRENDORA</h1>
+          <p class="brand-subtitle">Fashion Admin Panel</p>
+          <p class="brand-description">
+            Welcome back! Manage your fashion empire with style and elegance.
+          </p>
+          <div class="decorative-line"></div>
+        </div>
+      </div>
+
+      <!-- RIGHT SIDE - Login Form -->
+      <div class="login-right">
+        <div class="form-wrapper">
+          <div class="form-header">
+            <h2>Welcome Back</h2>
+            <p>Sign in to your account</p>
+          </div>
+
+          <form class="login-form" action="/admin/login" method="POST">
+            <!-- Email or Username Input -->
+            <div class="form-group">
+              <label for="memberNick">
+                <i class="bi bi-person-circle"></i>
+                Email or Username
+              </label>
+              <input
+                type="text"
+                id="memberNick"
+                name="memberNick"
+                class="form-control"
+                placeholder="Enter your email or username"
+                required
+              />
+              <small class="input-hint"
+                >You can login with either your email or username</small
+              >
+            </div>
+
+            <!-- Hidden field for memberEmail (backend compatibility) -->
+            <input type="hidden" name="memberEmail" id="memberEmail" value="" />
+
+            <!-- Password Input -->
+            <div class="form-group">
+              <label for="memberPassword">
+                <i class="bi bi-lock-fill"></i>
+                Password
+              </label>
+              <input
+                type="password"
+                id="memberPassword"
+                name="memberPassword"
+                class="form-control"
+                placeholder="Enter your password"
+                required
+              />
+            </div>
+
+            <!-- Submit Button -->
+            <button type="submit" class="btn-submit" name="login">
+              <span>Sign In</span>
+              <i class="bi bi-arrow-right-circle-fill"></i>
+            </button>
+
+            <!-- Link to Signup -->
+            <div class="form-footer">
+              <p>
+                Don't have an account? <a href="/admin/signup">Sign up here</a>
+              </p>
+              <p class="home-link"><a href="/admin">← Back to Home</a></p>
+            </div>
+          </form>
+
+          <script>
+            // Copy memberNick value to memberEmail before submit
+            document
+              .querySelector(".login-form")
+              .addEventListener("submit", function (e) {
+                const nickInput = document.getElementById("memberNick");
+                const emailInput = document.getElementById("memberEmail");
+                emailInput.value = nickInput.value;
+              });
+          </script>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+<%- include('includes/footer') %>

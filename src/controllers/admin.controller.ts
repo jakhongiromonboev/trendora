@@ -15,10 +15,10 @@ const memberService = new MemberService(); //getting instance from Member Servic
 const adminController: T = {};
 
 //HOME
-adminController.goHome = (req: Request, res: Response) => {
+adminController.goHome = (req: AdminRequest, res: Response) => {
   try {
     console.log("goHome");
-    res.render("home");
+    res.render("home", { member: req.session?.member || null });
   } catch (err) {
     console.log("Error, goHome:", err);
     res.redirect("/admin");
@@ -85,7 +85,7 @@ adminController.processLogin = async (req: AdminRequest, res: Response) => {
 
     req.session.member = result;
     req.session.save(function () {
-      res.send(result);
+      res.redirect("/admin/dashboard");
     });
   } catch (err) {
     console.log("Error, processLogin:", err);
@@ -101,10 +101,22 @@ adminController.logout = async (req: AdminRequest, res: Response) => {
   try {
     console.log("logout");
     req.session.destroy(function () {
-      res.send("LOGOUT DONE");
+      res.redirect("/admin");
     });
   } catch (err) {
     console.log("Error,logout", err);
+    res.redirect("/admin");
+  }
+};
+
+//ADMIN --> DASHBOARD
+
+adminController.goDashboard = (req: AdminRequest, res: Response) => {
+  try {
+    console.log("goDashboard");
+    res.render("dashboard");
+  } catch (err) {
+    console.log("Error, goDashboard");
     res.redirect("/admin");
   }
 };

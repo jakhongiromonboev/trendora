@@ -1,0 +1,33 @@
+<%- include('includes/header') %>
+
+<link rel="stylesheet" href="/css/home.css" />
+<body>
+  <div class="home-page">
+    <% if (!member) { %>
+    <!-- GUEST VIEW -->
+    <div class="home-guest">
+      <div class="guest-left">
+        <img src="/img/brand-logo.png" alt="TRENDORA" class="brand-logo" />
+        <h1 class="brand-title">TRENDORA</h1>
+        <p class="brand-subtitle">Fashion Admin Panel</p>
+        <p class="brand-description">
+          Manage your clothing store with style and elegance
+        </p>
+      </div>
+      <div class="guest-right">
+        <a href="/admin/login" class="btn btn-login">Login</a>
+        <a href="/admin/signup" class="btn btn-signup">Sign Up</a>
+      </div>
+    </div>
+    <% } else { %>
+    <!-- LOGGED IN - REDIRECT TO DASHBOARD -->
+    <script>
+      window.location.href = "/admin/dashboard";
+    </script>
+    <% } %>
+  </div>
+
+  <script src="/js/home.js"></script>
+</body>
+
+<%- include('includes/footer') %>

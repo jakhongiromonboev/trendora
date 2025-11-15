@@ -28,6 +28,12 @@ routerAdmin.get("/check-me", adminController.checkAuthSession);
 
 /** DASHBOARD **/
 
+routerAdmin.get(
+  "/dashboard",
+  adminController.verifyAdmin,
+  adminController.goDashboard
+);
+
 /** PRODUCTS **/
 
 routerAdmin.get(
