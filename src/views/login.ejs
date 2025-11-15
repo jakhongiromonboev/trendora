@@ -3,7 +3,6 @@
 <body>
   <div class="login-page">
     <div class="login-container">
-      <!-- LEFT SIDE - Image/Branding -->
       <div class="login-left">
         <div class="branding-content">
           <h1 class="brand-title">TRENDORA</h1>
@@ -15,7 +14,6 @@
         </div>
       </div>
 
-      <!-- RIGHT SIDE - Login Form -->
       <div class="login-right">
         <div class="form-wrapper">
           <div class="form-header">
@@ -24,7 +22,6 @@
           </div>
 
           <form class="login-form" action="/admin/login" method="POST">
-            <!-- Email or Username Input -->
             <div class="form-group">
               <label for="memberNick">
                 <i class="bi bi-person-circle"></i>
@@ -46,7 +43,6 @@
             <!-- Hidden field for memberEmail (backend compatibility) -->
             <input type="hidden" name="memberEmail" id="memberEmail" value="" />
 
-            <!-- Password Input -->
             <div class="form-group">
               <label for="memberPassword">
                 <i class="bi bi-lock-fill"></i>
@@ -62,13 +58,11 @@
               />
             </div>
 
-            <!-- Submit Button -->
             <button type="submit" class="btn-submit" name="login">
               <span>Sign In</span>
               <i class="bi bi-arrow-right-circle-fill"></i>
             </button>
 
-            <!-- Link to Signup -->
             <div class="form-footer">
               <p>
                 Don't have an account? <a href="/admin/signup">Sign up here</a>

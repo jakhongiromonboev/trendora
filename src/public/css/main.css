@@ -1,7 +1,7 @@
-/* ===== GLOBAL IMPORTS ===== */
+/* GLOBAL IMPORTS */
 @import url("https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap");
 
-/* ===== GLOBAL RESET ===== */
+/* GLOBAL RESET */
 * {
   margin: 0;
   padding: 0;
@@ -26,7 +26,7 @@ body {
 main {
   flex: 1;
 }
-/* ===== SCROLLBAR ===== */
+/* SCROLLBAR */
 ::-webkit-scrollbar {
   width: 10px;
 }
@@ -40,7 +40,6 @@ main {
   background: linear-gradient(135deg, #b98a56, #c7985d);
 }
 
-/* ===== NAVBAR STYLES - REFINED ===== */
 .main-navbar {
   background: #ffffff;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
@@ -62,7 +61,6 @@ main {
   margin: 0 auto;
 }
 
-/* Logo Section - CIRCULAR WITH SHADOW */
 .main-navbar .navbar-logo {
   flex: 0 0 auto;
   transition: transform 0.3s ease;
@@ -78,7 +76,7 @@ main {
   height: 60px;
   width: 60px;
   object-fit: cover;
-  border-radius: 50%; /* CIRCULAR */
+  border-radius: 50%;
   box-shadow: 0 4px 15px rgba(212, 165, 116, 0.3);
   border: 3px solid #f5f1e8;
   transition: all 0.3s ease;
@@ -89,7 +87,6 @@ main {
   border-color: #d4a574;
 }
 
-/* Navigation Links */
 .main-navbar .navbar-links {
   display: flex;
   gap: 1rem;
@@ -129,7 +126,6 @@ main {
   width: 70%;
 }
 
-/* Sign Up Button */
 .main-navbar .nav-link-signup {
   background: linear-gradient(135deg, #2d2d2d 0%, #1a1a1a 100%);
   color: #ffffff !important;
@@ -148,7 +144,6 @@ main {
   display: none;
 }
 
-/* Logout Link */
 .main-navbar .nav-link-logout {
   color: #c85a54;
   font-weight: 600;
@@ -159,7 +154,6 @@ main {
   background: rgba(200, 90, 84, 0.08);
 }
 
-/* Mobile Menu Toggle */
 .main-navbar .mobile-menu-toggle {
   display: none;
   flex-direction: column;
@@ -258,7 +252,7 @@ main {
     width: 50px;
   }
 }
-/* ===== FOOTER STYLES - MINIMAL & CLEAN ===== */
+/* FOOTER */
 .main-footer {
   background: linear-gradient(135deg, #2d2d2d 0%, #1a1a1a 100%);
   color: #ffffff;
@@ -274,7 +268,6 @@ main {
   margin: 0 auto;
 }
 
-/* Footer Content */
 .main-footer .footer-content {
   display: flex;
   justify-content: space-between;
@@ -284,7 +277,6 @@ main {
   gap: 2rem;
 }
 
-/* Footer Brand */
 .main-footer .footer-brand h3 {
   font-family: "Poppins", sans-serif;
   font-size: 1.5rem;
@@ -299,7 +291,6 @@ main {
   font-size: 0.85rem;
 }
 
-/* Footer Social */
 .main-footer .footer-social {
   display: flex;
   gap: 1rem;
@@ -327,7 +318,6 @@ main {
   box-shadow: 0 5px 15px rgba(212, 165, 116, 0.4);
 }
 
-/* Footer Bottom */
 .main-footer .footer-bottom {
   text-align: center;
   padding-top: 1.5rem;
