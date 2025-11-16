@@ -51,7 +51,7 @@ adminController.processSignup = async (req: AdminRequest, res: Response) => {
 
     req.session.member = result;
     req.session.save(function () {
-      res.send(result);
+      res.redirect("/admin/dashboard");
     });
 
     console.log("result:", result);
@@ -72,7 +72,7 @@ adminController.getLogin = (req: Request, res: Response) => {
     res.render("login");
   } catch (err) {
     console.log("Error, getLogin", err);
-    res.redirect("/admin");
+    res.redirect("/admin/dashboard");
   }
 };
 
