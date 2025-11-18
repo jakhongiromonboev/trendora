@@ -1,0 +1,346 @@
+<%- include('includes/header') %>
+
+<link rel="stylesheet" type="text/css" href="/css/products.css" />
+
+<body>
+  <div class="dashboard-layout">
+    
+    <aside class="sidebar">  
+      <nav>
+        <a href="/admin/dashboard">
+          <i class="bi bi-house-door-fill"></i> Dashboard
+        </a>
+        <a href="/admin/product/all" class="active">
+          <i class="bi bi-bag-fill"></i> Products
+        </a>
+        <a href="/admin/user/all">
+          <i class="bi bi-people-fill"></i> Users
+        </a>
+        <a href="/admin/order/all">
+          <i class="bi bi-receipt-cutoff"></i> Orders
+        </a>
+        <a href="/admin/profile">
+          <i class="bi bi-person-circle"></i> Profile
+        </a>
+      </nav>
+      
+      <a href="/admin/logout" class="logout">
+        <i class="bi bi-box-arrow-right"></i> Logout
+      </a>
+    </aside>
+
+    <main class="main-content">
+      <div class="products-page">
+        <div class="page-header">
+          <div class="header-left">
+            <h1 class="page-title">Products Management</h1>
+            <p class="page-subtitle">Manage your clothing inventory</p>
+          </div>
+          <div class="header-right">
+            <button class="btn-new-product" id="newProductBtn">
+              <i class="bi bi-plus-circle"></i>
+              <span>New Product</span>
+            </button>
+          </div>
+        </div>
+        <div class="products-table-wrapper">
+          <table class="products-table">
+            <thead>
+              <tr>
+                <th>IMAGE</th>
+                <th>NAME</th>
+                <th>COLLECTION</th>
+                <th>GENDER</th>
+                <th>SIZE</th>
+                <th>PRICE</th>
+                <th>LEFT COUNT</th>
+                <th>STATUS</th>
+                <th>ACTION</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% if (products && products.length > 0) { %>
+                <% products.forEach(function(product) { %>
+                  <tr class="product-row" data-id="<%= product._id %>">
+                    <!-- Image -->
+                    <td class="product-image-cell">
+                      <div class="product-image-wrapper">
+                        <% if (product.productImages && product.productImages.length > 0) { %>
+                          <img src="/<%= product.productImages[0] %>" alt="<%= product.productName %>" class="product-image">
+                        <% } else { %>
+                          <div class="no-image-placeholder">
+                            <i class="bi bi-image"></i>
+                          </div>
+                        <% } %>
+                      </div>
+                    </td>
+                    <td class="product-name-cell">
+                      <span class="product-name"><%= product.productName %></span>
+                    </td>
+
+                    <td class="product-collection-cell">
+                      <span class="badge badge-collection"><%= product.productCollection %></span>
+                    </td>
+
+                    <td class="product-gender-cell">
+                      <span class="badge badge-gender"><%= product.productGender %></span>
+                    </td>
+
+                    <td class="product-size-cell">
+                      <% if (product.productCollection === 'SHOES' && product.productShoeSize) { %>
+                        <span class="product-size"><%= product.productShoeSize %></span>
+                      <% } else if (product.productSize) { %>
+                        <span class="product-size"><%= product.productSize %></span>
+                      <% } else { %>
+                        <span class="product-size text-muted">-</span>
+                      <% } %>
+                    </td>
+
+                    <td class="product-price-cell">
+                      <span class="product-price">$<%= product.productPrice.toFixed(2) %></span>
+                    </td>
+
+                    <td class="product-leftcount-cell">
+                      <span class="product-leftcount"><%= product.productLeftCount %></span>
+                    </td>
+
+                    <td class="product-status-cell">
+                      <select class="status-select status-<%= product.productStatus.toLowerCase() %>" data-id="<%= product._id %>">
+                        <option value="PAUSE" <%= product.productStatus === 'PAUSE' ? 'selected' : '' %>>PAUSE</option>
+                        <option value="PROCESS" <%= product.productStatus === 'PROCESS' ? 'selected' : '' %>>PROCESS</option>
+                        <option value="DELETE" <%= product.productStatus === 'DELETE' ? 'selected' : '' %>>DELETE</option>
+                      </select>
+                    </td>
+
+                    <td class="product-action-cell">
+                      <button class="btn-edit" data-id="<%= product._id %>">
+                        <i class="bi bi-pencil-square"></i>
+                      </button>
+                    </td>
+                  </tr>
+                <% }); %>
+              <% } else { %>
+                <tr>
+                  <td colspan="9" class="no-products">
+                    <div class="empty-state">
+                      <i class="bi bi-inbox"></i>
+                      <p>No products yet</p>
+                      <span>Create your first product to get started!</span>
+                    </div>
+                  </td>
+                </tr>
+              <% } %>
+            </tbody>
+          </table>
+        </div>
+
+      </div>
+
+      <!-- New Product Form Panel -->
+      <div class="product-form-panel" id="productFormPanel">
+        <div class="panel-header">
+          <h2>Create New Product</h2>
+          <button class="btn-close-panel" id="closePanelBtn">
+            <i class="bi bi-x-lg"></i>
+          </button>
+        </div>
+
+        <form id="createProductForm" class="product-form" enctype="multipart/form-data">
+          <div class="form-group">
+            <label for="productName">
+              <i class="bi bi-tag-fill"></i>
+              Product Name
+            </label>
+            <input 
+              type="text" 
+              id="productName" 
+              name="productName" 
+              class="form-control" 
+              placeholder="Classic Denim Jacket"
+              required
+            >
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label for="productPrice">
+                <i class="bi bi-currency-dollar"></i>
+                Price (USD)
+              </label>
+              <input 
+                type="number" 
+                id="productPrice" 
+                name="productPrice" 
+                class="form-control" 
+                placeholder="79.99" 
+                step="0.01" 
+                min="0"
+                required
+              >
+            </div>
+            <div class="form-group">
+              <label for="productLeftCount">
+                <i class="bi bi-box-seam-fill"></i>
+                Product Leftcount
+              </label>
+              <input 
+                type="number" 
+                id="productLeftCount" 
+                name="productLeftCount" 
+                class="form-control" 
+                placeholder="50" 
+                min="0"
+                required
+              >
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="productCollection">
+                <i class="bi bi-collection-fill"></i>
+                Collection
+              </label>
+              <select id="productCollection" name="productCollection" class="form-control" required>
+                <option value="">Choose Collection</option>
+                <option value="TOPS">Tops</option>
+                <option value="BOTTOMS">Bottoms</option>
+                <option value="DRESSES">Dresses</option>
+                <option value="SHOES">Shoes</option>
+                <option value="ACCESSORIES">Accessories</option>
+                <option value="OTHER">Other</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="productGender">
+                <i class="bi bi-gender-ambiguous"></i>
+                Gender Category
+              </label>
+              <select id="productGender" name="productGender" class="form-control" required>
+                <option value="">Choose Gender</option>
+                <option value="MALE">Male</option>
+                <option value="FEMALE">Female</option>
+                <option value="UNISEX">Unisex</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Size Options -->
+          <div class="form-row">
+            <div class="form-group" id="clothingSizeGroup">
+              <label for="productSize">
+                <i class="bi bi-rulers"></i>
+                Clothing Size
+              </label>
+              <select id="productSize" name="productSize" class="form-control">
+                <option value="">Select Size</option>
+                <option value="XS">XS - Extra Small</option>
+                <option value="S">S - Small</option>
+                <option value="M">M - Medium</option>
+                <option value="L">L - Large</option>
+                <option value="XL">XL - Extra Large</option>
+                <option value="XXL">XXL - Double XL</option>
+              </select>
+            </div>
+
+            <!-- Shoe Size (for shoes only) -->
+            <div class="form-group" id="shoeSizeGroup" style="display: none;">
+              <label for="productShoeSize">
+                <i class="bi bi-rulers"></i>
+                Shoe Size (mm)
+              </label>
+              <select id="productShoeSize" name="productShoeSize" class="form-control">
+                <option value="">Select Size</option>
+                <option value="220">220mm</option>
+                <option value="225">225mm</option>
+                <option value="230">230mm</option>
+                <option value="235">235mm</option>
+                <option value="240">240mm</option>
+                <option value="245">245mm</option>
+                <option value="250">250mm</option>
+                <option value="255">255mm</option>
+                <option value="260">260mm</option>
+                <option value="265">265mm</option>
+                <option value="270">270mm</option>
+                <option value="275">275mm</option>
+                <option value="280">280mm</option>
+                <option value="285">285mm</option>
+                <option value="290">290mm</option>
+                <option value="295">295mm</option>
+                <option value="300">300mm</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="productDesc">
+              <i class="bi bi-card-text"></i>
+              Product Description
+            </label>
+            <textarea 
+              id="productDesc" 
+              name="productDesc" 
+              class="form-control" 
+              rows="4" 
+              placeholder="Describe the product: material, fit, style, care instructions..."
+            ></textarea>
+          </div>
+
+          <!-- Image Upload -->
+          <div class="form-group">
+            <label>
+              <i class="bi bi-images"></i>
+              Product Images
+              <span class="label-note">(First image required, up to 5 total)</span>
+            </label>
+            <div class="image-upload-grid">
+              <% for (let i = 1; i <= 5; i++) { %>
+                <div class="image-upload-box">
+                  <input 
+                    type="file" 
+                    id="productImage<%= i %>" 
+                    name="productImages" 
+                    class="image-input" 
+                    accept="image/jpeg,image/jpg,image/png,image/webp"
+                    <%= i === 1 ? 'required' : '' %>
+                  >
+                  <label for="productImage<%= i %>" class="image-label">
+                    <img src="/img/default.jpeg" class="upload-preview" id="imagePreview<%= i %>">
+                    <span class="upload-text">
+                      <%= i === 1 ? 'Required' : 'Optional' %>
+                    </span>
+                  </label>
+                </div>
+              <% } %>
+            </div>
+            <p class="form-hint">
+              <i class="bi bi-info-circle"></i>
+              Accepted formats: JPEG, JPG, PNG, Max 5MB per image.
+            </p>
+          </div>
+
+          <input type="hidden" name="productStatus" value="PAUSE">
+
+          <div class="form-actions">
+            <button type="button" class="btn-cancel" id="cancelBtn">
+              <i class="bi bi-x-circle"></i>
+              Cancel
+            </button>
+            <button type="submit" class="btn-create">
+              <i class="bi bi-check-circle"></i>
+              Create Product
+            </button>
+          </div>
+
+        </form>
+      </div>
+
+      <div class="panel-overlay" id="panelOverlay"></div>
+
+    </main>
+
+  </div>
+
+  <script type="text/javascript" src="/js/products.js"></script>
+</body>
+
+<%- include('includes/admin-footer') %>

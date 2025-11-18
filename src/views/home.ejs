@@ -1,6 +1,6 @@
 <%- include('includes/header') %>
-
 <link rel="stylesheet" href="/css/home.css" />
+
 <body>
   <div class="home-page">
     <% if (!member) { %>
@@ -20,7 +20,7 @@
       </div>
     </div>
     <% } else { %>
-    <!-- LOGGED IN -->
+    <!-- LOGGED IN - Redirect to Dashboard -->
     <script>
       window.location.href = "/admin/dashboard";
     </script>
@@ -28,6 +28,6 @@
   </div>
 
   <script src="/js/home.js"></script>
-</body>
 
-<%- include('includes/footer') %>
+  <%- include('includes/footer') %>
+</body>

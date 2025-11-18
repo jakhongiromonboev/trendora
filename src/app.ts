@@ -21,6 +21,7 @@ const store = new MongoDBStore({
 /** 1-ENTRANCE **/
 const app = express();
 app.use(express.static(path.join(__dirname, "public")));
+app.use("/uploads", express.static("./uploads"));
 app.use(express.urlencoded({ extended: true })); //TRADITIONAL API REQ
 app.use(express.json()); //REST API REQ
 app.use(
