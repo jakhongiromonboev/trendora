@@ -1,0 +1,156 @@
+<%- include('includes/header') %>
+
+<link rel="stylesheet" type="text/css" href="/css/users.css" />
+
+<body>
+  <div class="dashboard-layout">
+    
+    <aside class="sidebar">  
+      <nav>
+        <a href="/admin/dashboard">
+          <i class="bi bi-house-door-fill"></i> Dashboard
+        </a>
+        <a href="/admin/product/all">
+          <i class="bi bi-bag-fill"></i> Products
+        </a>
+        <a href="/admin/user/all" class="active">
+          <i class="bi bi-people-fill"></i> Users
+        </a>
+        <a href="/admin/order/all">
+          <i class="bi bi-receipt-cutoff"></i> Orders
+        </a>
+        <a href="/admin/profile">
+          <i class="bi bi-person-circle"></i> Profile
+        </a>
+      </nav>
+      
+      <a href="/admin/logout" class="logout">
+        <i class="bi bi-box-arrow-right"></i> Logout
+      </a>
+    </aside>
+
+    <main class="main-content">
+      <div class="users-page">
+        <div class="page-header">
+          <div class="header-left">
+            <h1 class="page-title">Users Management</h1>
+            <p class="page-subtitle">Manage your customer accounts</p>
+          </div>
+        </div>
+
+        <div class="users-table-wrapper">
+          <table class="users-table">
+            <thead>
+              <tr>
+                <th>AVATAR</th>
+                <th>NAME</th>
+                <th>PHONE</th>
+                <th>EMAIL</th>
+                <th>MEMBER TYPE</th>
+                <th>JOINED DATE</th>
+                <th>STATUS</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% if (users && users.length > 0) { %>
+                <% users.forEach(function(user, index) { %>
+                  <tr class="user-row" data-id="<%= user._id %>">
+                    
+                    <!-- Avatar -->
+                    <td class="user-avatar-cell">
+                      <div class="user-avatar-wrapper">
+                        <% if (user.memberImage) { %>
+                          <img src="/<%= user.memberImage %>" alt="<%= user.memberNick %>" class="user-avatar">
+                        <% } else { %>
+                          <div class="avatar-placeholder">
+                            <i class="bi bi-person-fill"></i>
+                          </div>
+                        <% } %>
+                      </div>
+                    </td>
+
+                    <!-- Name -->
+                    <td class="user-name-cell">
+                      <span class="user-name"><%= user.memberNick %></span>
+                    </td>
+
+                    <!-- Phone -->
+                    <td class="user-phone-cell">
+                      <span class="user-phone">
+                        <i class="bi bi-telephone-fill"></i>
+                        <%= user.memberPhone %>
+                      </span>
+                    </td>
+
+                    <!-- Email -->
+                    <td class="user-email-cell">
+                      <span class="user-email">
+                        <% if (user.memberEmail) { %>
+                          <i class="bi bi-envelope-fill"></i>
+                          <%= user.memberEmail %>
+                        <% } else { %>
+                          <span class="text-muted">-</span>
+                        <% } %>
+                      </span>
+                    </td>
+
+                    <!-- Member Type -->
+                    <td class="user-type-cell">
+                      <% if (user.memberType === 'ADMIN') { %>
+                        <span class="badge badge-type badge-admin">
+                          ADMIN
+                        </span>
+                      <% } else { %>
+                        <span class="badge badge-type">
+                          USER
+                        </span>
+                      <% } %>
+                    </td>
+
+                    <!-- Joined Date -->
+                    <td class="user-date-cell">
+                      <span class="user-date">
+                        <i class="bi bi-calendar-check"></i>
+                        <% if (user.createdAt) { %>
+                          <%= new Date(user.createdAt).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }) %>
+                        <% } else { %>
+                          -
+                        <% } %>
+                      </span>
+                    </td>
+
+                    <!-- Status -->
+                    <td class="user-status-cell">
+                      <select class="status-select status-<%= user.memberStatus.toLowerCase() %>" data-id="<%= user._id %>">
+                        <option value="ACTIVE" <%= user.memberStatus === 'ACTIVE' ? 'selected' : '' %>>ACTIVE</option>
+                        <option value="BLOCK" <%= user.memberStatus === 'BLOCK' ? 'selected' : '' %>>BLOCK</option>
+                        <option value="DELETE" <%= user.memberStatus === 'DELETE' ? 'selected' : '' %>>DELETE</option>
+                      </select>
+                    </td>
+
+                  </tr>
+                <% }); %>
+              <% } else { %>
+                <tr>
+                  <td colspan="7" class="no-users">
+                    <div class="empty-state">
+                      <i class="bi bi-people"></i>
+                      <p>No users yet</p>
+                      <span>Users will appear here once they register!</span>
+                    </div>
+                  </td>
+                </tr>
+              <% } %>
+            </tbody>
+          </table>
+        </div>
+
+      </div>
+    </main>
+
+  </div>
+
+  <script type="text/javascript" src="/js/users.js"></script>
+</body>
+
+<%- include('includes/admin-footer') %>
