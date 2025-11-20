@@ -76,6 +76,27 @@
   color: #ffffff;
 }
 
+.sidebar nav a .count-badge {
+  margin-left: auto;
+  background: rgba(255, 255, 255, 0.25);
+  color: #ffffff;
+  font-size: 0.75rem;
+  font-weight: 800;
+  padding: 0.25rem 0.6rem;
+  border-radius: 12px;
+  min-width: 28px;
+  text-align: center;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  transition: all 0.3s ease;
+}
+
+.sidebar nav a.active .count-badge {
+  background: rgba(255, 255, 255, 0.95);
+  color: #d4a574;
+  transform: scale(1.05);
+  box-shadow: 0 3px 12px rgba(255, 255, 255, 0.3);
+}
+
 .sidebar .logout {
   margin-top: auto;
   display: flex;

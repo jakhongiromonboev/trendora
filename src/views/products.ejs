@@ -12,6 +12,7 @@
         </a>
         <a href="/admin/product/all" class="active">
           <i class="bi bi-bag-fill"></i> Products
+          <span class="count-badge"><%= products.length %></span>
         </a>
         <a href="/admin/user/all">
           <i class="bi bi-people-fill"></i> Users
@@ -54,6 +55,7 @@
                 <th>SIZE</th>
                 <th>PRICE</th>
                 <th>LEFT COUNT</th>
+                <th>CREATED DATE</th>
                 <th>STATUS</th>
                 <th>ACTION</th>
               </tr>
@@ -104,6 +106,17 @@
                       <span class="product-leftcount"><%= product.productLeftCount %></span>
                     </td>
 
+                    <td class="product-date-cell">
+                      <span class="product-date">
+                        <i class="bi bi-calendar-check"></i>
+                        <% if (product.createdAt) { %>
+                          <%= new Date(product.createdAt).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }) %>
+                        <% } else { %>
+                          -
+                        <% } %>
+                      </span>
+                    </td>
+
                     <td class="product-status-cell">
                       <select class="status-select status-<%= product.productStatus.toLowerCase() %>" data-id="<%= product._id %>">
                         <option value="PAUSE" <%= product.productStatus === 'PAUSE' ? 'selected' : '' %>>PAUSE</option>
@@ -121,7 +134,7 @@
                 <% }); %>
               <% } else { %>
                 <tr>
-                  <td colspan="9" class="no-products">
+                  <td colspan="10" class="no-products">
                     <div class="empty-state">
                       <i class="bi bi-inbox"></i>
                       <p>No products yet</p>
