@@ -140,6 +140,41 @@ class OrderService {
         },
       ])
       .exec();
+    if (!result) throw new Errors(HttpCode.NOT_FOUND, Message.NO_DATA_FOUND);
+
+    return result;
+  }
+
+  public async getAllOrderItemsByAdmin(id: string): Promise<Order[]> {
+    if (!id)
+      throw new Errors(HttpCode.BAD_REQUEST, Message.SOMETHING_WENT_WRONG);
+
+    const orderId = shapeIntoMongooseObjectId(id);
+    const match: T = { _id: orderId };
+
+    const result = await this.orderModel.aggregate([
+      { $match: match },
+      { $sort: { createdAt: -1 } },
+      {
+        $lookup: {
+          from: "orderItems",
+          localField: "_id",
+          foreignField: "orderId",
+          as: "orderItems",
+        },
+      },
+      {
+        $lookup: {
+          from: "products",
+          localField: "orderItems.productId",
+          foreignField: "_id",
+          as: "productData",
+        },
+      },
+    ]);
+
+    if (!result || result.length === 0)
+      throw new Errors(HttpCode.NOT_FOUND, Message.NO_DATA_FOUND);
 
     return result;
   }

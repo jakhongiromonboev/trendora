@@ -55,9 +55,32 @@ orderController.getAllOrdersByAdmin = async (req: Request, res: Response) => {
 
     const result = await orderService.getAllOrdersByAdmin(inquiry);
     // res.status(HttpCode.OK).json(result);
-    res.render("orders", { orders: result });
+    res.render("orders", {
+      orders: result,
+      page: inquiry.page,
+      limit: inquiry.limit,
+      orderStatus: orderStatus,
+    });
   } catch (err) {
     console.log("Error,getAllOrdersByAdmin", err);
+    if (err instanceof Errors) res.status(err.code).json(err);
+    else res.status(Errors.standard.code).json(Errors.standard);
+  }
+};
+
+orderController.getAllOrderItemsByAdmin = async (
+  req: Request,
+  res: Response
+) => {
+  try {
+    console.log("getAllOrderItemsByAdmin");
+    const { id } = req.query;
+    console.log("id", id);
+    const result = await orderService.getAllOrderItemsByAdmin(id as string);
+    // res.status(HttpCode.OK).json(result);
+    res.render("orders", { orderItems: result });
+  } catch (err) {
+    console.log("Error, getAllOrderItemsByAdmin:", err);
     if (err instanceof Errors) res.status(err.code).json(err);
     else res.status(Errors.standard.code).json(Errors.standard);
   }
