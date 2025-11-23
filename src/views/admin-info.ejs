@@ -1,0 +1,319 @@
+<%- include('includes/header') %>
+
+<link rel="stylesheet" type="text/css" href="/css/admin-info.css" />
+
+<body>
+  <div class="dashboard-layout">
+    <aside class="sidebar">
+      <nav>
+        <a href="/admin/dashboard">
+          <i class="bi bi-house-door-fill"></i> Dashboard
+        </a>
+        <a href="/admin/product/all">
+          <i class="bi bi-bag-fill"></i> Products
+        </a>
+        <a href="/admin/user/all"> <i class="bi bi-people-fill"></i> Users </a>
+        <a href="/admin/order/all">
+          <i class="bi bi-receipt-cutoff"></i> Orders
+        </a>
+        <a href="/admin/profile" class="active">
+          <i class="bi bi-person-circle"></i> Profile
+        </a>
+      </nav>
+
+      <a href="/admin/logout" class="logout">
+        <i class="bi bi-box-arrow-right"></i> Logout
+      </a>
+    </aside>
+
+    <main class="main-content">
+      <div class="profile-page">
+        <!-- Profile Header Card -->
+        <div class="profile-header-card">
+          <div class="profile-avatar-section">
+            <div class="avatar-wrapper">
+              <% if (admin.memberImage) { %>
+              <img
+                src="/<%= admin.memberImage %>"
+                alt="Avatar"
+                class="profile-avatar"
+                id="currentAvatar"
+              />
+              <% } else { %>
+              <div class="avatar-placeholder">
+                <i class="bi bi-person-fill"></i>
+              </div>
+              <% } %>
+              <button class="btn-change-avatar" id="changeAvatarBtn">
+                <i class="bi bi-camera-fill"></i>
+              </button>
+            </div>
+            <div class="profile-header-info">
+              <h1 class="profile-name"><%= admin.memberNick %></h1>
+              <p class="profile-role">
+                <span class="badge-admin">ADMIN</span>
+              </p>
+              <p class="profile-email">
+                <i class="bi bi-envelope-fill"></i>
+                <%= admin.memberEmail %>
+              </p>
+            </div>
+          </div>
+          <button class="btn-edit-profile" id="editProfileBtn">
+            <i class="bi bi-pencil-fill"></i> Edit Profile
+          </button>
+        </div>
+
+        <!-- Profile Information Card -->
+        <div class="profile-info-card">
+          <div class="card-header">
+            <h2>Profile Information</h2>
+          </div>
+          <div class="info-grid">
+            <div class="info-item">
+              <label>Username</label>
+              <p><%= admin.memberNick %></p>
+            </div>
+            <div class="info-item">
+              <label>Phone</label>
+              <p>
+                <% if (admin.memberPhone) { %>
+                <i class="bi bi-telephone-fill"></i>
+                <%= admin.memberPhone %> <% } else { %>
+                <span class="text-muted">Not provided</span>
+                <% } %>
+              </p>
+            </div>
+            <div class="info-item">
+              <label>Email</label>
+              <p>
+                <i class="bi bi-envelope-fill"></i>
+                <%= admin.memberEmail %>
+              </p>
+            </div>
+            <div class="info-item full-width">
+              <label>Address</label>
+              <p>
+                <% if (admin.memberAddress) { %>
+                <i class="bi bi-geo-alt-fill"></i>
+                <%= admin.memberAddress %> <% } else { %>
+                <span class="text-muted">Not provided</span>
+                <% } %>
+              </p>
+            </div>
+            <div class="info-item full-width">
+              <label>Bio</label>
+              <p>
+                <% if (admin.memberDesc) { %> <%= admin.memberDesc %> <% } else
+                { %>
+                <span class="text-muted">No bio added yet</span>
+                <% } %>
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Password Card -->
+        <div class="profile-info-card">
+          <div class="card-header">
+            <h2>Security</h2>
+            <button class="btn-edit-small" id="changePasswordBtn">
+              <i class="bi bi-pencil-fill"></i> Change Password
+            </button>
+          </div>
+          <div class="password-info">
+            <p class="password-last-changed">
+              <i class="bi bi-clock-fill"></i>
+              Last updated: <%= new
+              Date(admin.updatedAt).toLocaleDateString('en-US', { year:
+              'numeric', month: 'short', day: 'numeric' }) %>
+            </p>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <!-- Edit Profile Panel -->
+  <div class="edit-panel" id="editProfilePanel">
+    <div class="panel-header">
+      <h2>Edit Profile</h2>
+      <button class="btn-close-panel" id="closeProfilePanelBtn">
+        <i class="bi bi-x-lg"></i>
+      </button>
+    </div>
+    <form id="editProfileForm" class="panel-form">
+      <div class="form-group">
+        <label>
+          <i class="bi bi-person-fill"></i>
+          Username
+        </label>
+        <input
+          type="text"
+          name="memberNick"
+          class="form-control"
+          value="<%= admin.memberNick %>"
+          required
+        />
+      </div>
+
+      <div class="form-group">
+        <label>
+          <i class="bi bi-telephone-fill"></i>
+          Phone
+        </label>
+        <input
+          type="tel"
+          name="memberPhone"
+          class="form-control"
+          value="<%= admin.memberPhone || '' %>"
+          placeholder="+1234567890"
+        />
+      </div>
+
+      <div class="form-group">
+        <label>
+          <i class="bi bi-geo-alt-fill"></i>
+          Address
+        </label>
+        <input
+          type="text"
+          name="memberAddress"
+          class="form-control"
+          value="<%= admin.memberAddress || '' %>"
+          placeholder="City, State, Country"
+        />
+      </div>
+
+      <div class="form-group">
+        <label>
+          <i class="bi bi-card-text"></i>
+          Bio
+        </label>
+        <textarea
+          name="memberDesc"
+          class="form-control"
+          rows="4"
+          placeholder="Tell us about yourself..."
+        >
+<%= admin.memberDesc || '' %></textarea
+        >
+      </div>
+
+      <div class="form-group">
+        <label>
+          <i class="bi bi-image-fill"></i>
+          Profile Picture
+          <span class="label-note">JPG, PNG (Max 5MB)</span>
+        </label>
+        <input
+          type="file"
+          name="memberImage"
+          id="avatarInput"
+          class="form-control"
+          accept="image/*"
+        />
+        <div class="avatar-preview" id="avatarPreview" style="display: none">
+          <img src="" alt="Preview" id="previewImage" />
+          <button
+            type="button"
+            class="btn-remove-preview"
+            id="removePreviewBtn"
+          >
+            <i class="bi bi-x-lg"></i>
+          </button>
+        </div>
+      </div>
+
+      <div class="form-actions">
+        <button type="button" class="btn-cancel" id="cancelProfileBtn">
+          Cancel
+        </button>
+        <button type="submit" class="btn-save">
+          <i class="bi bi-check-circle-fill"></i>
+          Save Changes
+        </button>
+      </div>
+    </form>
+  </div>
+
+  <!-- Change Password Panel -->
+  <div class="edit-panel" id="changePasswordPanel">
+    <div class="panel-header">
+      <h2>Change Password</h2>
+      <button class="btn-close-panel" id="closePasswordPanelBtn">
+        <i class="bi bi-x-lg"></i>
+      </button>
+    </div>
+    <form id="changePasswordForm" class="panel-form">
+      <div class="form-group">
+        <label>
+          <i class="bi bi-shield-lock-fill"></i>
+          New Password
+          <span class="label-note">Minimum 8 characters</span>
+        </label>
+        <input
+          type="password"
+          name="memberPassword"
+          id="newPassword"
+          class="form-control"
+          required
+          placeholder="Enter new password"
+          minlength="8"
+        />
+      </div>
+
+      <div class="form-group">
+        <label>
+          <i class="bi bi-shield-check-fill"></i>
+          Confirm New Password
+        </label>
+        <input
+          type="password"
+          name="confirmPassword"
+          id="confirmPassword"
+          class="form-control"
+          required
+          placeholder="Confirm new password"
+          minlength="8"
+        />
+      </div>
+
+      <div class="password-requirements">
+        <p class="requirements-title">
+          <i class="bi bi-info-circle-fill"></i>
+          Password Requirements:
+        </p>
+        <ul>
+          <li>At least 8 characters long</li>
+          <li>Both passwords must match</li>
+        </ul>
+      </div>
+
+      <div class="form-actions">
+        <button type="button" class="btn-cancel" id="cancelPasswordBtn">
+          Cancel
+        </button>
+        <button type="submit" class="btn-save">
+          <i class="bi bi-check-circle-fill"></i>
+          Update Password
+        </button>
+      </div>
+    </form>
+  </div>
+
+  <!-- Overlay -->
+  <div class="panel-overlay" id="panelOverlay"></div>
+
+  <script>
+    const adminData = {
+      _id: "<%= admin._id %>",
+      memberNick: "<%= admin.memberNick %>",
+      memberEmail: "<%= admin.memberEmail %>",
+    };
+  </script>
+
+  <script type="text/javascript" src="/js/admin-info.js"></script>
+</body>
+
+<%- include('includes/admin-footer') %>
