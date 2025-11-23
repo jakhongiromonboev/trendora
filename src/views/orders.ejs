@@ -1,0 +1,218 @@
+<%- include('includes/header') %>
+
+<link rel="stylesheet" type="text/css" href="/css/orders.css" />
+
+<body>
+  <div class="dashboard-layout">
+    
+    <aside class="sidebar">  
+      <nav>
+        <a href="/admin/dashboard">
+          <i class="bi bi-house-door-fill"></i> Dashboard
+        </a>
+        <a href="/admin/product/all">
+          <i class="bi bi-bag-fill"></i> Products
+        </a>
+        <a href="/admin/user/all">
+          <i class="bi bi-people-fill"></i> Users
+        </a>
+        <a href="/admin/order/all" class="active">
+          <i class="bi bi-receipt-cutoff"></i> Orders
+          <span class="count-badge"><%= orders.length %></span>
+        </a>
+        <a href="/admin/profile">
+          <i class="bi bi-person-circle"></i> Profile
+        </a>
+      </nav>
+      
+      <a href="/admin/logout" class="logout">
+        <i class="bi bi-box-arrow-right"></i> Logout
+      </a>
+    </aside>
+
+    <main class="main-content">
+      <div class="orders-page">
+        
+        <div class="page-header">
+          <div class="header-text">
+            <h1 class="page-title">Orders Management</h1>
+            <p class="page-subtitle">Track and manage customer orders</p>
+          </div>
+          
+          <div class="filters-right">
+            <div class="filter-item">
+              <label>Status:</label>
+              <select id="statusFilter" class="filter-select">
+                <option value="">All</option>
+                <option value="PENDING" <%= orderStatus === 'PENDING' ? 'selected' : '' %>>Pending</option>
+                <option value="PROCESSING" <%= orderStatus === 'PROCESSING' ? 'selected' : '' %>>Processing</option>
+                <option value="DELIVERED" <%= orderStatus === 'DELIVERED' ? 'selected' : '' %>>Delivered</option>
+              </select>
+            </div>
+
+            <div class="filter-item">
+              <label>Show:</label>
+              <select id="limitSelect" class="filter-select">
+                <option value="10" <%= limit === 10 ? 'selected' : '' %>>10</option>
+                <option value="25" <%= limit === 25 ? 'selected' : '' %>>25</option>
+                <option value="50" <%= limit === 50 ? 'selected' : '' %>>50</option>
+                <option value="100" <%= limit === 100 ? 'selected' : '' %>>100</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div class="orders-table-wrapper">
+          <table class="orders-table">
+            <thead>
+              <tr>
+                <th>ACTION</th>
+                <th>ORDER ID</th>
+                <th>CUSTOMER</th>
+                <th>PHONE</th>
+                <th>TOTAL</th>
+                <th>DELIVERY</th>
+                <th>ORDER DATE</th>
+                <th>STATUS</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% if (orders && orders.length > 0) { %>
+                <% orders.forEach(function(order) { %>
+                  <tr class="order-row" data-order-id="<%= order._id %>">
+                    
+                    <td class="action-cell">
+                      <button class="expand-btn-text" data-order-id="<%= order._id %>">
+                        <span class="expand-text">View Items</span>
+                        <i class="bi bi-arrow-right expand-icon"></i>
+                      </button>
+                    </td>
+
+                    <td class="order-id-cell">
+                      <span class="order-id">#<%= order._id.toString().slice(-6).toUpperCase() %></span>
+                    </td>
+
+                    <td class="order-customer-cell">
+                      <div class="customer-info">
+                        <% if (order.memberData && order.memberData.length > 0) { %>
+                          <% if (order.memberData[0].memberImage) { %>
+                            <img src="/<%= order.memberData[0].memberImage %>" alt="Avatar" class="customer-avatar">
+                          <% } else { %>
+                            <div class="customer-avatar-placeholder">
+                              <i class="bi bi-person-fill"></i>
+                            </div>
+                          <% } %>
+                          <span class="customer-name"><%= order.memberData[0].memberNick %></span>
+                        <% } else { %>
+                          <span class="text-muted">Unknown</span>
+                        <% } %>
+                      </div>
+                    </td>
+
+                    <td class="order-phone-cell">
+                      <span class="order-phone">
+                        <% if (order.memberData && order.memberData.length > 0) { %>
+                          <i class="bi bi-telephone-fill"></i>
+                          <%= order.memberData[0].memberPhone %>
+                        <% } else { %>
+                          <span class="text-muted">-</span>
+                        <% } %>
+                      </span>
+                    </td>
+
+                    <td class="order-total-cell">
+                      <span class="order-total">$<%= order.orderTotal.toFixed(2) %></span>
+                    </td>
+
+                    <td class="order-delivery-cell">
+                      <span class="order-delivery">$<%= order.orderDelivery.toFixed(2) %></span>
+                    </td>
+
+                    <td class="order-date-cell">
+                      <span class="order-date">
+                        <i class="bi bi-calendar-check"></i>
+                        <%= new Date(order.createdAt).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' }) %>
+                      </span>
+                    </td>
+
+                    <td class="order-status-cell">
+                      <select class="status-select status-<%= order.orderStatus.toLowerCase() %>" data-id="<%= order._id %>">
+                        <option value="PENDING" <%= order.orderStatus === 'PENDING' ? 'selected' : '' %>>PENDING</option>
+                        <option value="PROCESSING" <%= order.orderStatus === 'PROCESSING' ? 'selected' : '' %>>PROCESSING</option>
+                        <option value="DELIVERED" <%= order.orderStatus === 'DELIVERED' ? 'selected' : '' %>>DELIVERED</option>
+                      </select>
+                    </td>
+                  </tr>
+
+                  <tr class="order-items-row" data-order-id="<%= order._id %>" style="display: none;">
+                    <td colspan="8">
+                      <div class="order-items-container">
+                        <div class="items-header">
+                          <h3><i class="bi bi-box-seam-fill"></i> Order Items</h3>
+                          <span class="loading-spinner" style="display: none;">
+                            <i class="bi bi-arrow-repeat"></i> Loading...
+                          </span>
+                        </div>
+                        
+                        <div class="items-table-wrapper"></div>
+
+                        <div class="items-total" style="display: none;">
+                          <strong>Order Total:</strong> 
+                          <span class="total-amount"></span>
+                        </div>
+                      </div>
+                    </td>
+                  </tr>
+                <% }); %>
+              <% } else { %>
+                <tr>
+                  <td colspan="8" class="no-orders">
+                    <div class="empty-state">
+                      <i class="bi bi-inbox"></i>
+                      <p>No orders found</p>
+                      <% if (orderStatus) { %>
+                        <span>No <%= orderStatus %> orders at the moment</span>
+                      <% } else { %>
+                        <span>Orders will appear here when customers make purchases</span>
+                      <% } %>
+                    </div>
+                  </td>
+                </tr>
+              <% } %>
+            </tbody>
+          </table>
+        </div>
+
+        <% if (orders && orders.length > 0) { %>
+          <div class="pagination">
+            <% if (page > 1) { %>
+              <button class="page-circle" data-page="<%= page - 1 %>">←</button>
+            <% } %>
+            
+            <% for (var i = Math.max(1, page - 2); i <= page + 2; i++) { %>
+              <button class="page-circle <%= page === i ? 'active' : '' %>" data-page="<%= i %>">
+                <%= i %>
+              </button>
+            <% } %>
+            
+            <% if (orders.length >= limit) { %>
+              <button class="page-circle" data-page="<%= page + 1 %>">→</button>
+            <% } %>
+          </div>
+        <% } %>
+
+      </div>
+    </main>
+
+  </div>
+
+  <script>
+    var currentPage = Number('<%= page || 1 %>');
+    var currentLimit = Number('<%= limit || 10 %>');
+    var currentStatus = '<%= orderStatus || "" %>';
+  </script>
+
+  <script type="text/javascript" src="/js/orders.js"></script>
+</body>
+
+<%- include('includes/admin-footer') %>

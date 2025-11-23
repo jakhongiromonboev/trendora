@@ -77,8 +77,8 @@ orderController.getAllOrderItemsByAdmin = async (
     const { id } = req.query;
     console.log("id", id);
     const result = await orderService.getAllOrderItemsByAdmin(id as string);
-    // res.status(HttpCode.OK).json(result);
-    res.render("orders", { orderItems: result });
+    res.status(HttpCode.OK).json(result);
+    // res.render("orders", { orderItems: result });
   } catch (err) {
     console.log("Error, getAllOrderItemsByAdmin:", err);
     if (err instanceof Errors) res.status(err.code).json(err);
