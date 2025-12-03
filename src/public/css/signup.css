@@ -493,7 +493,7 @@ body {
   color: #c9985d;
 }
 
-/* ANIMATIONS */
+/* 
 @keyframes fadeInScale {
   from {
     opacity: 0;
@@ -546,7 +546,6 @@ body {
   }
 }
 
-/* Fashion Icons Float Animations */
 @keyframes floatIcon1 {
   0%,
   100% {
@@ -616,7 +615,7 @@ body {
   66% {
     transform: translate(-8px, -8px) scale(0.9);
   }
-}
+} */
 
 /* ===== RESPONSIVE ===== */
 @media (max-width: 992px) {

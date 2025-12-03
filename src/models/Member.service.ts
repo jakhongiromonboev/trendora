@@ -56,6 +56,8 @@ class MemberService {
       throw new Errors(HttpCode.NOT_FOUND, msg);
     }
 
+    console.log("member:", member);
+
     const isMatch = await bcrypt.compare(
       input.memberPassword,
       member.memberPassword
@@ -185,6 +187,16 @@ class MemberService {
     input: MemberUpdateInput
   ): Promise<Member> {
     const memberId = shapeIntoMongooseObjectId(member._id);
+
+    console.log("input:", input);
+
+    if (input.memberPassword) {
+      const salt = await bcrypt.genSalt();
+      input.memberPassword = await bcrypt.hash(input.memberPassword, salt);
+    }
+
+    console.log("input.memberPassword:", input.memberPassword);
+
     const result = await this.memberModel
       .findOneAndUpdate(
         { _id: memberId, memberType: MemberType.ADMIN },

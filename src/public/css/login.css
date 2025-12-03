@@ -430,7 +430,10 @@ body {
   color: #c9985d;
 }
 
-/* ANIMATIONS */
+/* 
+
+ANIMATIONS
+
 @keyframes fadeInScale {
   from {
     opacity: 0;
@@ -539,7 +542,7 @@ body {
   80% {
     transform: translate(-10px, -15px) rotate(-6deg);
   }
-}
+} */
 
 /* ===== RESPONSIVE ===== */
 @media (max-width: 992px) {
