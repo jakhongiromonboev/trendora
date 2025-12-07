@@ -4,7 +4,7 @@ import Errors, { HttpCode, Message } from "../libs/Errors";
 import { T } from "../libs/types/common";
 import { AdminRequest, ExtendedRequest } from "../libs/types/member";
 import { ProductInput, ProductInquiry } from "../libs/types/product";
-import { ProductCollection } from "../libs/enums/product.enum";
+import { ProductCollection, ProductGender } from "../libs/enums/product.enum";
 
 const productService = new ProductService();
 const productController: T = {};
@@ -24,9 +24,15 @@ productController.getProducts = async (req: Request, res: Response) => {
     if (productCollection) {
       inquiry.productCollection = productCollection as ProductCollection;
     }
+
+    if (gender) {
+      inquiry.gender = gender as ProductGender;
+    }
+
     if (search) inquiry.search = String(search);
 
     const result = await productService.getProducts(inquiry);
+    console.log("getAllProducts:", result);
     res.status(HttpCode.OK).json(result);
   } catch (err) {
     console.log("Error, getProducts", err);
@@ -40,10 +46,12 @@ productController.getProduct = async (req: ExtendedRequest, res: Response) => {
     console.log("getProduct");
 
     const { id } = req.params;
-    const memberId = req.member._id ?? null;
+    console.log("id", id);
+    const memberId = req.member?._id ?? null;
     const result = await productService.getProduct(memberId, id);
 
     res.status(HttpCode.OK).json(result);
+    console.log("getproduct", result);
   } catch (err) {
     console.log("Error:getProduct", err);
     if (err instanceof Errors) res.status(err.code).json(err);
