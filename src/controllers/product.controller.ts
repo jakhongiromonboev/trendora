@@ -4,7 +4,12 @@ import Errors, { HttpCode, Message } from "../libs/Errors";
 import { T } from "../libs/types/common";
 import { AdminRequest, ExtendedRequest } from "../libs/types/member";
 import { ProductInput, ProductInquiry } from "../libs/types/product";
-import { ProductCollection, ProductGender } from "../libs/enums/product.enum";
+import {
+  ProductCollection,
+  ProductGender,
+  ProductShoeSize,
+  ProductSize,
+} from "../libs/enums/product.enum";
 
 const productService = new ProductService();
 const productController: T = {};
@@ -14,7 +19,16 @@ const productController: T = {};
 productController.getProducts = async (req: Request, res: Response) => {
   try {
     console.log("getProducts");
-    const { page, limit, order, productCollection, gender, search } = req.query;
+    const {
+      page,
+      limit,
+      order,
+      productCollection,
+      gender,
+      search,
+      productSize,
+      productShoeSize,
+    } = req.query;
     const inquiry: ProductInquiry = {
       order: String(order),
       page: Number(page),
@@ -28,6 +42,11 @@ productController.getProducts = async (req: Request, res: Response) => {
     if (gender) {
       inquiry.gender = gender as ProductGender;
     }
+
+    if (productSize) inquiry.productSize = productSize as ProductSize;
+
+    if (productShoeSize)
+      inquiry.productShoeSize = productShoeSize as ProductShoeSize;
 
     if (search) inquiry.search = String(search);
 

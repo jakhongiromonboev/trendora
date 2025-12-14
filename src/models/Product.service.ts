@@ -31,6 +31,9 @@ class ProductService {
     if (inquiry.search)
       match.productName = { $regex: new RegExp(inquiry.search, "i") };
     if (inquiry.gender) match.productGender = inquiry.gender;
+    if (inquiry.productSize) match.productSize = inquiry.productSize;
+    if (inquiry.productShoeSize)
+      match.productShoeSize = inquiry.productShoeSize;
 
     const sort: T =
       inquiry.order === "productPrice"
