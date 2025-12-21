@@ -118,6 +118,22 @@ class OrderService {
     return result;
   }
 
+  public async cancelOrderByUser(input: OrderUpdateInput): Promise<Order> {
+    const orderId = shapeIntoMongooseObjectId(input.orderId);
+
+    const order = await this.orderModel.findByIdAndUpdate(
+      orderId,
+      {
+        orderStatus: input.orderStatus,
+      },
+      { new: true }
+    );
+
+    if (!order) throw new Errors(HttpCode.NOT_FOUND, Message.NO_DATA_FOUND);
+
+    return order;
+  }
+
   /** SSR --> ADMIN **/
   public async getAllOrdersByAdmin(inquiry: OrderInquiry): Promise<Order[]> {
     const { page, limit, orderStatus } = inquiry;

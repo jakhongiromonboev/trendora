@@ -41,6 +41,20 @@ orderController.getMyOrders = async (req: ExtendedRequest, res: Response) => {
   }
 };
 
+orderController.cancelOrderByUser = async (req: Request, res: Response) => {
+  try {
+    console.log("cancelOrderByUser");
+    const input: OrderUpdateInput = req.body;
+    const result = await orderService.cancelOrderByUser(input);
+
+    res.status(HttpCode.OK).json(result);
+  } catch (err) {
+    console.log("Error,cancelOrderByUser:", err);
+    if (err instanceof Errors) res.status(err.code).json(err);
+    else res.status(Errors.standard.code).json(Errors.standard);
+  }
+};
+
 /** ADMIN (SSR) --> ORDERS **/
 orderController.getAllOrdersByAdmin = async (req: Request, res: Response) => {
   try {
@@ -92,7 +106,7 @@ orderController.updateOrderByAdmin = async (req: Request, res: Response) => {
     const input: OrderUpdateInput = req.body;
     const result = await orderService.updateOrderByAdmin(input);
 
-    res.status(HttpCode.CREATED).json(result);
+    res.status(HttpCode.OK).json(result);
   } catch (err) {
     console.log("Error,updateOrderByAdmin", err);
     if (err instanceof Errors) res.status(err.code).json(err);

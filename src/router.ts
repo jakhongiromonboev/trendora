@@ -51,4 +51,10 @@ router.get(
   orderController.getMyOrders
 );
 
+router.post(
+  "/order/cancel",
+  memberController.verifyAuth,
+  orderController.cancelOrderByUser
+);
+
 export default router;
