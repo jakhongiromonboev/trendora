@@ -118,7 +118,7 @@ class OrderService {
     return result;
   }
 
-  public async cancelOrderByUser(input: OrderUpdateInput): Promise<Order> {
+  public async updateOrderByUser(input: OrderUpdateInput): Promise<Order> {
     const orderId = shapeIntoMongooseObjectId(input.orderId);
 
     const order = await this.orderModel.findByIdAndUpdate(

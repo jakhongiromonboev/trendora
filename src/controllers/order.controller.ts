@@ -41,15 +41,15 @@ orderController.getMyOrders = async (req: ExtendedRequest, res: Response) => {
   }
 };
 
-orderController.cancelOrderByUser = async (req: Request, res: Response) => {
+orderController.updateOrderByUser = async (req: Request, res: Response) => {
   try {
-    console.log("cancelOrderByUser");
+    console.log("updateOrderByUser");
     const input: OrderUpdateInput = req.body;
-    const result = await orderService.cancelOrderByUser(input);
+    const result = await orderService.updateOrderByUser(input);
 
     res.status(HttpCode.OK).json(result);
   } catch (err) {
-    console.log("Error,cancelOrderByUser:", err);
+    console.log("Error,updateOrderByUser:", err);
     if (err instanceof Errors) res.status(err.code).json(err);
     else res.status(Errors.standard.code).json(Errors.standard);
   }

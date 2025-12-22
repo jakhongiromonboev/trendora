@@ -52,9 +52,9 @@ router.get(
 );
 
 router.post(
-  "/order/cancel",
+  "/order/update",
   memberController.verifyAuth,
-  orderController.cancelOrderByUser
+  orderController.updateOrderByUser
 );
 
 export default router;
