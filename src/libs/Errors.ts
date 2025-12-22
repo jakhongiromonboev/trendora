@@ -23,6 +23,7 @@ export enum Message {
   TOKEN_CREATION_FAILED = "TOKEN CREATION ERROR",
   EMAIL_REQUIRED = "Email is required!",
   USED_EMAIL = "This email is already used please select another email!",
+  EXISTING = "Nick, email, or phone already exists",
 }
 
 class Errors extends Error {

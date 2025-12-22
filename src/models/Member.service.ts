@@ -10,6 +10,7 @@ import {
 } from "../libs/types/member";
 import MemberModel from "../schema/Member.model";
 import * as bcrypt from "bcrypt";
+import { T } from "../libs/types/common";
 
 class MemberService {
   private readonly memberModel;
@@ -90,7 +91,30 @@ class MemberService {
   ): Promise<Member> {
     const memberId = shapeIntoMongooseObjectId(member._id);
 
-    const result = this.memberModel
+    const fieldsToCheck: T[] = [];
+
+    if (input.memberNick) fieldsToCheck.push({ memberNick: input.memberNick });
+    if (input.memberEmail)
+      fieldsToCheck.push({ memberEmail: input.memberEmail });
+    if (input.memberPhone)
+      fieldsToCheck.push({ memberPhone: input.memberPhone });
+
+    if (fieldsToCheck.length > 0) {
+      const existingMember = await this.memberModel.findOne({
+        $or: fieldsToCheck,
+        _id: { $ne: memberId },
+      });
+
+      if (existingMember)
+        throw new Errors(HttpCode.BAD_REQUEST, Message.EXISTING);
+    }
+
+    if (input.memberPassword) {
+      const salt = await bcrypt.genSalt();
+      input.memberPassword = await bcrypt.hash(input.memberPassword, salt);
+    }
+
+    const result = await this.memberModel
       .findByIdAndUpdate({ _id: memberId }, input, { new: true })
       .exec();
 
