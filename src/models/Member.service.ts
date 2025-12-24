@@ -108,6 +108,7 @@ class MemberService {
       if (existingMember)
         throw new Errors(HttpCode.BAD_REQUEST, Message.EXISTING);
     }
+    console.log("input.memberPassword", input.memberPassword);
 
     if (input.memberPassword) {
       const salt = await bcrypt.genSalt();
