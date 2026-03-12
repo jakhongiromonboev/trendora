@@ -28,7 +28,7 @@ app.use(
   cors({
     credentials: true,
     origin: true,
-  })
+  }),
 );
 app.use(cookieParser());
 app.use(morgan(MORGAN_FORMAT));
@@ -43,7 +43,7 @@ app.use(
     store: store,
     resave: true,
     saveUninitialized: true,
-  })
+  }),
 );
 
 app.use(function (req, res, next) {
